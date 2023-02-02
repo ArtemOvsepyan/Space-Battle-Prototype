@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed;
     private float verticalInput;
     private float horizontalInput;
-    private readonly float  xRange = 14;
+    private readonly float  xRange = 11.77f;
     private readonly float yRangeDown = 11;
     private readonly float yRangeUp = 23;
     public bool hasPowerUp;       

@@ -5,7 +5,7 @@ public class ScoreScript : MonoBehaviour
     private GameManager gameManager;
     private PlayerController playerController;
 
-    [SerializeField] private float pointValue;
+    [SerializeField] private int pointValue;
 
     // Start is called before the first frame update
     void Start()

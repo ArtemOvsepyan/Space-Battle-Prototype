@@ -9,14 +9,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] asteroidPrefab;
     [SerializeField] private GameObject powerupPrefab;
 
-    [SerializeField] private TextMeshProUGUI titleScreen;
     [SerializeField] private TextMeshProUGUI gameOverScreen;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI bestScoreText;
 
-    [SerializeField] private Button startButton;
     [SerializeField] private Button restartButton;
 
-    [SerializeField] private float score;
+    [SerializeField] private int score;
     [SerializeField] private bool isGameActive;
 
     private readonly float spawnRangeX = 14;
@@ -27,11 +26,15 @@ public class GameManager : MonoBehaviour
     
 
     // Start the game
-    public void StartGame()
+    void Start()
     {
         isGameActive = true;
-        scoreText.gameObject.SetActive(true);
         GameActive();
+
+        if (MainManager.Instance != null)
+        {
+            bestScoreText.text = MainManager.Instance.ShowHighScore();
+        }
     }
     // Update is called once per frame
     void Update()
@@ -44,10 +47,13 @@ public class GameManager : MonoBehaviour
     {
         if (GameObject.Find("Player") == null)
         {
+            MainManager.Instance.SavingHighScore(score);
+            bestScoreText.text = MainManager.Instance.ShowHighScore();
             isGameActive = false;
             CancelInvoke();
             gameOverScreen.gameObject.SetActive(true);
             restartButton.gameObject.SetActive(true);
+
         }
     }
 
@@ -55,8 +61,6 @@ public class GameManager : MonoBehaviour
     {
         if (isGameActive)
         {
-            startButton.gameObject.SetActive(false);
-            titleScreen.gameObject.SetActive(false);
             UpdateScore(0);
             SpawnObjects();
         }
@@ -64,14 +68,14 @@ public class GameManager : MonoBehaviour
     // Restart the game
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); ;
     }
 
     // Update scores with alien value
-    public void UpdateScore(float scoreToAdd)
+    public void UpdateScore(int scoreToAdd)
     {
         score += scoreToAdd;
-        scoreText.text = "Score: " + score;
+        scoreText.text = $"Score: {score}";
     }
 
     // Spawn aliens
